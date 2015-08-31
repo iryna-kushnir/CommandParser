@@ -1,0 +1,9 @@
+C:\tests\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\tests\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\tests\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\tests\CommandParser\CommandParser\bin\Debug\CommandParser.exe.config
+C:\tests\CommandParser\CommandParser\bin\Debug\CommandParser.exe
+C:\tests\CommandParser\CommandParser\bin\Debug\CommandParser.pdb
+C:\tests\CommandParser\CommandParser\obj\Debug\CommandParser.csprojResolveAssemblyReference.cache
+C:\tests\CommandParser\CommandParser\obj\Debug\CommandParser.exe
+C:\tests\CommandParser\CommandParser\obj\Debug\CommandParser.pdb
