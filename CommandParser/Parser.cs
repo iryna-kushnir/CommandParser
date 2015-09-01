@@ -24,7 +24,8 @@ namespace CommandParser
                     case "-ping": {Commands.Ping(); break;}
                     case "-print":
                     {
-                        if (i + 1 == args.Length || i + 1 == FindIndexOfNextCommand(i + 1, args)) Commands.Print(null);
+						if (i + 1 == args.Length)
+							Commands.Print (null);
                         else
                         {
                             i++;

@@ -23,7 +23,10 @@ namespace CommandParser
 
         public static void Print(string message)
         {
-            Console.WriteLine(message);
+			if (message == null)
+				Console.WriteLine ("You didn't specify message for '-print' command. Use CommandParser.exe /? to see user help.");
+			else
+				Console.WriteLine (message);
         }
 
         public static void PrintKeyValue(string [] keysAndValues)
@@ -31,7 +34,7 @@ namespace CommandParser
             int l = keysAndValues.Length;
             if (l == 0)
             {
-                Console.WriteLine("null");
+				Console.WriteLine("You didn't specify keys and values for '-k' command. Use CommandParser.exe /? to see user help.");
             }
             else 
             {
