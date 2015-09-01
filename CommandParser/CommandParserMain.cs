@@ -10,7 +10,7 @@ namespace CommandParser
     {
         static void Main(string[] args)
         {
-           Commands.PrintKeyValue(args);
+           Parser.ParseArgsAndExecuteCommands(args);
 
         }
     }
