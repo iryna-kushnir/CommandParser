@@ -1,5 +1,0 @@
-C:\tests\Kottans\CommandParser\CommandParser\bin\Debug\CommandParser.exe.config
-C:\tests\Kottans\CommandParser\CommandParser\bin\Debug\CommandParser.exe
-C:\tests\Kottans\CommandParser\CommandParser\bin\Debug\CommandParser.pdb
-C:\tests\Kottans\CommandParser\CommandParser\obj\Debug\CommandParser.exe
-C:\tests\Kottans\CommandParser\CommandParser\obj\Debug\CommandParser.pdb
