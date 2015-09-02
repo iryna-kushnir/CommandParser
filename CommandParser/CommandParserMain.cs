@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CommandParser
+﻿namespace CommandParser
 {
     public class CommandParserMain
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-           Parser.ParseArgsAndExecuteCommands(args);
-
+            Parser.ParseArgsAndExecuteCommands(args);
         }
     }
 }
