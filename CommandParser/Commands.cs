@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CommandParser
 {
@@ -37,16 +38,21 @@ namespace CommandParser
                 Console.WriteLine(message);
         }
 
-        public static void PrintKeyValue(string[] keysAndValues)
+        public static void PrintKeyValue(List<string> keysAndValues)
         {
-            var l = keysAndValues.Length;
-            if (l == 0)
+
+            if (keysAndValues.Count == 0 || (keysAndValues[0] == "[" && keysAndValues.Last() == "]"))
             {
                 Console.WriteLine(
                     "You didn't specify keys and values for '-k' command. Use CommandParser.exe /? to see user help.");
             }
             else
             {
+                if (keysAndValues[0] == "[") keysAndValues.RemoveAt(0);
+                if (keysAndValues[0].StartsWith("[")) keysAndValues[0] = keysAndValues[0].Substring(1);
+                if (keysAndValues.Last() == "]") keysAndValues.RemoveAt(keysAndValues.Count - 1);
+                var l = keysAndValues.Count;
+                if (keysAndValues.Last().EndsWith("]")) keysAndValues[l - 1] = keysAndValues[l - 1].Remove(l - 1, 1);
                 for (var i = 0; i <= (l%2 == 0 ? l - 2 : l - 3); i += 2)
                 {
                     Console.WriteLine("{0} - {1}", keysAndValues[i], keysAndValues[i + 1]);
