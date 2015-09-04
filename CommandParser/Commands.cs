@@ -4,8 +4,14 @@ using System.Linq;
 
 namespace CommandParser
 {
+    /// <summary>
+    ///     Contains methods that execute all the supported commands
+    /// </summary>
     public static class Commands
     {
+        /// <summary>
+        ///     The list of supported commands
+        /// </summary>
         public static List<string> AwailableCommands = new List<string>
         {
             "/?",
@@ -18,17 +24,41 @@ namespace CommandParser
             "-sort"
         };
 
+        /// <summary>
+        ///     Prints user help to console - description of all supported commands. Corresponds to /?, /help and -help commands
+        /// </summary>
         public static void ShowHelp()
         {
-            Console.WriteLine("Help!!!!!!");
+            Console.WriteLine(@"Welcome to CommandParser! 
+            
+Here is the list of supported commands:
+/? - Shows user help
+/help - Shows user help
+-help - Shows user help
+-k [key value] - Prints parameters as key-value pairs. Prints all the parameters within [] brackets or if there is no brackets takes all the parameters until occurrence of the next command
+-ping - Makes a pinging sound
+-print <message> - Prints provided message
+-color <color_name> - Changes text color to color_name
+-sort [values to sort] - Sorts and prints provided values. Sorts all the values within [] brackets or if there is no brackets takes all the values until occurrence of the next command
+
+Usage example: CommandParser.exe -k [key1 value1 key2 value2]
+
+You can pass a few commands simultaneously and they will be executed in turn!");
         }
 
+        /// <summary>
+        ///     Beeps at console. Corresponds to -ping command
+        /// </summary>
         public static void Ping()
         {
             Console.WriteLine("Pinging...");
             Console.Beep();
         }
 
+        /// <summary>
+        ///     Prints provided message to console. Corresponds to -print command
+        /// </summary>
+        /// <param name="message">Message to be printed to console</param>
         public static void Print(string message)
         {
             if (message == null)
@@ -38,10 +68,17 @@ namespace CommandParser
                 Console.WriteLine(message);
         }
 
+        /// <summary>
+        ///     Prints items at provided list as pairs of keys and values. E.g.:
+        ///     key1 - value1
+        ///     key2 - value2
+        ///     Corresponds to -k command
+        /// </summary>
+        /// <param name="keysAndValues">List of keys and values to be printed</param>
         public static void PrintKeyValue(List<string> keysAndValues)
         {
             RemoveBrakets(ref keysAndValues);
-            int l = keysAndValues.Count; 
+            var l = keysAndValues.Count;
             if (keysAndValues.Count == 0)
             {
                 Console.WriteLine(
@@ -49,7 +86,7 @@ namespace CommandParser
             }
             else
             {
-                for (var i = 0; i <= (l % 2 == 0 ? l - 2 : l - 3); i += 2)
+                for (var i = 0; i <= (l%2 == 0 ? l - 2 : l - 3); i += 2)
                 {
                     Console.WriteLine("{0} - {1}", keysAndValues[i], keysAndValues[i + 1]);
                 }
@@ -58,6 +95,11 @@ namespace CommandParser
             }
         }
 
+        /// <summary>
+        ///     Changes color of text in console to provided one. If there was provided invalid color name, the text color gets
+        ///     changed back to white. Corresponds to -color command
+        /// </summary>
+        /// <param name="color">Desired color of text in console</param>
         public static void ChangeTextColor(string color)
         {
             ConsoleColor parsedColor;
@@ -72,10 +114,14 @@ namespace CommandParser
             }
         }
 
+        /// <summary>
+        ///     Sorts and prints to console provided list. Corresponds to -sort command
+        /// </summary>
+        /// <param name="list"></param>
         public static void SortAndPrint(List<string> list)
         {
             RemoveBrakets(ref list);
-            int l = list.Count;
+            var l = list.Count;
             if (list.Count == 0)
             {
                 Console.WriteLine(
@@ -85,7 +131,7 @@ namespace CommandParser
             {
                 list.Sort();
                 foreach (var item in
-                list)
+                    list)
                 {
                     Console.Write("{0} ", item);
                 }
@@ -93,9 +139,14 @@ namespace CommandParser
             }
         }
 
+        /// <summary>
+        ///     Removes [] brackets from the provided list of parameters (if both starting [ and closing ] brackets surround the
+        ///     list)
+        /// </summary>
+        /// <param name="list">List of parameters to remove [] from</param>
         private static void RemoveBrakets(ref List<string> list)
         {
-            int l = list.Count;
+            var l = list.Count;
             if (l != 0)
             {
                 if (list[0].StartsWith("[") && list.Last().EndsWith("]"))
@@ -111,10 +162,9 @@ namespace CommandParser
                         l = list.Count;
                         if (list.Last().EndsWith("]"))
                             list[l - 1] = list[l - 1].Remove(list[l - 1].Length - 1, 1);
-
                     }
                 }
             }
-        } 
+        }
     }
 }

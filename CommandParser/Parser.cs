@@ -3,8 +3,15 @@ using System.Collections.Generic;
 
 namespace CommandParser
 {
+    /// <summary>
+    ///     Contains methods for parsing command line arguments
+    /// </summary>
     public static class Parser
     {
+        /// <summary>
+        ///     Method that goes through command line arguments and executes corresponding commands
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
         public static void ParseArgsAndExecuteCommands(string[] args)
         {
             if (args.Length == 0) Commands.ShowHelp();
@@ -42,34 +49,6 @@ namespace CommandParser
                     case "-k":
                     {
                         ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.PrintKeyValue);
-                        //if (i + 1 != args.Length && args[i + 1].StartsWith("["))
-                        //{ 
-                          
-                        //    var closingIndex = FindIndexOfNextClosingBracket(i + 1, args);
-                        //    if (closingIndex == args.Length)
-                        //    {
-                        //        var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
-                        //        Commands.PrintKeyValue(
-                        //            new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
-                        //        i = nextCommandIndex - 1;
-                        //    }
-                        //    else
-                        //    {
-                                
-                        //        Commands.PrintKeyValue(
-                        //            new List<string>(args).GetRange(i + 1, closingIndex - i));
-                        //        i = closingIndex;
-                        //    }
-
-                        //}
-                        //else
-                        //{
-                        //    var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
-                        //    Commands.PrintKeyValue(
-                        //        new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
-                        //    i = nextCommandIndex - 1;
-                           
-                        //}
                         break;
                     }
                     case "-color":
@@ -86,40 +65,18 @@ namespace CommandParser
                     case "-sort":
                     {
                         ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.SortAndPrint);
-                        //if (i + 1 != args.Length && args[i + 1].StartsWith("["))
-                        //{
-
-                        //    var closingIndex = FindIndexOfNextClosingBracket(i + 1, args);
-                        //    if (closingIndex == args.Length)
-                        //    {
-                        //        var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
-                        //        Commands.SortAndPrint(
-                        //            new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
-                        //        i = nextCommandIndex - 1;
-                        //    }
-                        //    else
-                        //    {
-
-                        //        Commands.SortAndPrint(
-                        //            new List<string>(args).GetRange(i + 1, closingIndex - i));
-                        //        i = closingIndex;
-                        //    }
-
-                        //}
-                        //else
-                        //{
-                        //    var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
-                        //    Commands.SortAndPrint(
-                        //        new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
-                        //    i = nextCommandIndex - 1;
-
-                        //}
                         break;
                     }
                 }
             }
         }
 
+        /// <summary>
+        ///     Finds the first occurrence of supported command at array of command line args starting from provided index
+        /// </summary>
+        /// <param name="startIndex">Index from which to start searching for first supported command occurrence</param>
+        /// <param name="args">Command line arguments</param>
+        /// <returns>Index where the first occurrence of supported command was found. If no command was found returns args length</returns>
         private static int FindIndexOfNextCommand(int startIndex, string[] args)
         {
             for (var i = startIndex; i < args.Length; i++)
@@ -129,21 +86,34 @@ namespace CommandParser
             return args.Length;
         }
 
+        /// <summary>
+        ///     Finds the first occurrence of the closing bracket ] at array of command line args starting from provided index
+        /// </summary>
+        /// <param name="startIndex">Index from which to start searching for first supported command occurrence</param>
+        /// <param name="args">Command line arguments</param>
+        /// <returns>Index where the first occurrence of closing bracket ] was found. If no command was found returns args length</returns>
         private static int FindIndexOfNextClosingBracket(int startIndex, string[] args)
         {
             for (var i = startIndex; i < args.Length; i++)
             {
-                
                 if (args[i].EndsWith("]")) return i;
             }
             return args.Length;
         }
 
-        private static void ChooseParamsAndInvokeBracketCommand(string[] args, ref int startIndex, Action<List<string>> action)
+        /// <summary>
+        ///     Selects parameters for -sort and -k commands from array of command line args and executes commands with selected
+        ///     parameters. Pases either all the parameters within [] brackets or all the parameters before occurrence of next
+        ///     command in case there is no brackets
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
+        /// <param name="startIndex">Index from which to start looking for parameters</param>
+        /// <param name="action">Command to be executed</param>
+        private static void ChooseParamsAndInvokeBracketCommand(string[] args, ref int startIndex,
+            Action<List<string>> action)
         {
             if (startIndex + 1 != args.Length && args[startIndex + 1].StartsWith("["))
             {
-
                 var closingIndex = FindIndexOfNextClosingBracket(startIndex + 1, args);
                 if (closingIndex == args.Length)
                 {
@@ -153,20 +123,17 @@ namespace CommandParser
                 }
                 else
                 {
-
                     action.Invoke(
                         new List<string>(args).GetRange(startIndex + 1, closingIndex - startIndex));
                     startIndex = closingIndex;
                 }
-
             }
             else
             {
                 var nextCommandIndex = FindIndexOfNextCommand(startIndex + 1, args);
-               action.Invoke(
+                action.Invoke(
                     new List<string>(args).GetRange(startIndex + 1, nextCommandIndex - startIndex - 1));
                 startIndex = nextCommandIndex - 1;
-
             }
         }
     }
