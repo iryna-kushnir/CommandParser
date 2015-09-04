@@ -41,22 +41,35 @@ namespace CommandParser
                     }
                     case "-k":
                     {
-                        if (i + 1 != args.Length && args[i + 1].StartsWith("["))
-                        {
-                            var closingIndex = FindIndexOfNextClosingBracket(i + 1, args);
-                            Commands.PrintKeyValue(
-                            new List<string>(args).GetRange(i + 1, closingIndex - i - 2));
-                            i = closingIndex - 1;
-                     
-                        }
-                        else
-                        {
-                            var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
-                            Commands.PrintKeyValue(
-                                new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
-                            i = nextCommandIndex - 1;
+                        ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.PrintKeyValue);
+                        //if (i + 1 != args.Length && args[i + 1].StartsWith("["))
+                        //{ 
+                          
+                        //    var closingIndex = FindIndexOfNextClosingBracket(i + 1, args);
+                        //    if (closingIndex == args.Length)
+                        //    {
+                        //        var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
+                        //        Commands.PrintKeyValue(
+                        //            new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
+                        //        i = nextCommandIndex - 1;
+                        //    }
+                        //    else
+                        //    {
+                                
+                        //        Commands.PrintKeyValue(
+                        //            new List<string>(args).GetRange(i + 1, closingIndex - i));
+                        //        i = closingIndex;
+                        //    }
+
+                        //}
+                        //else
+                        //{
+                        //    var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
+                        //    Commands.PrintKeyValue(
+                        //        new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
+                        //    i = nextCommandIndex - 1;
                            
-                        }
+                        //}
                         break;
                     }
                     case "-color":
@@ -70,11 +83,44 @@ namespace CommandParser
                         }
                         break;
                     }
+                    case "-sort":
+                    {
+                        ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.SortAndPrint);
+                        //if (i + 1 != args.Length && args[i + 1].StartsWith("["))
+                        //{
+
+                        //    var closingIndex = FindIndexOfNextClosingBracket(i + 1, args);
+                        //    if (closingIndex == args.Length)
+                        //    {
+                        //        var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
+                        //        Commands.SortAndPrint(
+                        //            new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
+                        //        i = nextCommandIndex - 1;
+                        //    }
+                        //    else
+                        //    {
+
+                        //        Commands.SortAndPrint(
+                        //            new List<string>(args).GetRange(i + 1, closingIndex - i));
+                        //        i = closingIndex;
+                        //    }
+
+                        //}
+                        //else
+                        //{
+                        //    var nextCommandIndex = FindIndexOfNextCommand(i + 1, args);
+                        //    Commands.SortAndPrint(
+                        //        new List<string>(args).GetRange(i + 1, nextCommandIndex - i - 1));
+                        //    i = nextCommandIndex - 1;
+
+                        //}
+                        break;
+                    }
                 }
             }
         }
 
-        public static int FindIndexOfNextCommand(int startIndex, string[] args)
+        private static int FindIndexOfNextCommand(int startIndex, string[] args)
         {
             for (var i = startIndex; i < args.Length; i++)
             {
@@ -83,13 +129,45 @@ namespace CommandParser
             return args.Length;
         }
 
-        public static int FindIndexOfNextClosingBracket(int startIndex, string[] args)
+        private static int FindIndexOfNextClosingBracket(int startIndex, string[] args)
         {
             for (var i = startIndex; i < args.Length; i++)
             {
+                
                 if (args[i].EndsWith("]")) return i;
             }
             return args.Length;
+        }
+
+        private static void ChooseParamsAndInvokeBracketCommand(string[] args, ref int startIndex, Action<List<string>> action)
+        {
+            if (startIndex + 1 != args.Length && args[startIndex + 1].StartsWith("["))
+            {
+
+                var closingIndex = FindIndexOfNextClosingBracket(startIndex + 1, args);
+                if (closingIndex == args.Length)
+                {
+                    var nextCommandIndex = FindIndexOfNextCommand(startIndex + 1, args);
+                    action.Invoke(new List<string>(args).GetRange(startIndex + 1, nextCommandIndex - startIndex - 1));
+                    startIndex = nextCommandIndex - 1;
+                }
+                else
+                {
+
+                    action.Invoke(
+                        new List<string>(args).GetRange(startIndex + 1, closingIndex - startIndex));
+                    startIndex = closingIndex;
+                }
+
+            }
+            else
+            {
+                var nextCommandIndex = FindIndexOfNextCommand(startIndex + 1, args);
+               action.Invoke(
+                    new List<string>(args).GetRange(startIndex + 1, nextCommandIndex - startIndex - 1));
+                startIndex = nextCommandIndex - 1;
+
+            }
         }
     }
 }

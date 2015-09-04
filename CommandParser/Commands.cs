@@ -40,20 +40,16 @@ namespace CommandParser
 
         public static void PrintKeyValue(List<string> keysAndValues)
         {
-
-            if (keysAndValues.Count == 0 || (keysAndValues[0] == "[" && keysAndValues.Last() == "]"))
+            RemoveBrakets(ref keysAndValues);
+            int l = keysAndValues.Count; 
+            if (keysAndValues.Count == 0)
             {
                 Console.WriteLine(
                     "You didn't specify keys and values for '-k' command. Use CommandParser.exe /? to see user help.");
             }
             else
             {
-                if (keysAndValues[0] == "[") keysAndValues.RemoveAt(0);
-                if (keysAndValues[0].StartsWith("[")) keysAndValues[0] = keysAndValues[0].Substring(1);
-                if (keysAndValues.Last() == "]") keysAndValues.RemoveAt(keysAndValues.Count - 1);
-                var l = keysAndValues.Count;
-                if (keysAndValues.Last().EndsWith("]")) keysAndValues[l - 1] = keysAndValues[l - 1].Remove(l - 1, 1);
-                for (var i = 0; i <= (l%2 == 0 ? l - 2 : l - 3); i += 2)
+                for (var i = 0; i <= (l % 2 == 0 ? l - 2 : l - 3); i += 2)
                 {
                     Console.WriteLine("{0} - {1}", keysAndValues[i], keysAndValues[i + 1]);
                 }
@@ -75,5 +71,50 @@ namespace CommandParser
                 Console.WriteLine("'{0}' is not a color.", color);
             }
         }
+
+        public static void SortAndPrint(List<string> list)
+        {
+            RemoveBrakets(ref list);
+            int l = list.Count;
+            if (list.Count == 0)
+            {
+                Console.WriteLine(
+                    "You didn't specify keys and values for '-sort' command. Use CommandParser.exe /? to see user help.");
+            }
+            else
+            {
+                list.Sort();
+                foreach (var item in
+                list)
+                {
+                    Console.Write("{0} ", item);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private static void RemoveBrakets(ref List<string> list)
+        {
+            int l = list.Count;
+            if (l != 0)
+            {
+                if (list[0].StartsWith("[") && list.Last().EndsWith("]"))
+                {
+                    if (list[0] == "[") list.RemoveAt(0);
+                    else
+                    {
+                        if (list[0].StartsWith("[")) list[0] = list[0].Substring(1);
+                    }
+                    if (list.Last() == "]") list.RemoveAt(list.Count - 1);
+                    else
+                    {
+                        l = list.Count;
+                        if (list.Last().EndsWith("]"))
+                            list[l - 1] = list[l - 1].Remove(list[l - 1].Length - 1, 1);
+
+                    }
+                }
+            }
+        } 
     }
 }
