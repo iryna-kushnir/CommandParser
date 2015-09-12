@@ -1,4 +1,7 @@
-﻿namespace CommandParser
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace CommandParser
 {
     /// <summary>
     ///     Class that contains Main for CommandParser
@@ -12,7 +15,11 @@
         /// <param name="args">Command line arguments</param>
         private static void Main(string[] args)
         {
-            Parser.ParseArgsAndExecuteCommands(args);
+            bool exit = Parser.ParseArgsAndExecuteCommands(args);
+			while (!exit) 
+			{
+				exit = Parser.ParseArgsAndExecuteCommands (new Regex(" ").Split(Console.ReadLine ()));
+			}
         }
     }
 }

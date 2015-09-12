@@ -9,26 +9,27 @@ namespace CommandParser
     public static class Parser
     {
         /// <summary>
-        ///     Method that goes through command line arguments and executes corresponding commands
+        ///     Method that goes through command line arguments and executes corresponding commands until -exit command happens
         /// </summary>
         /// <param name="args">Command line arguments</param>
-        public static void ParseArgsAndExecuteCommands(string[] args)
+		/// <returns>Bool value that indicates if -exit command was among arguments</returns>
+        public static bool ParseArgsAndExecuteCommands(string[] args)
         {
-            if (args.Length == 0) Commands.ShowHelp();
+			if (args.Length == 0) Commands.ShowHelp();
             if (args.Length == 1 && (args[0] == "/?" || args[0] == "/help" || args[0] == "-help"))
             {
                 Commands.ShowHelp();
             }
             for (var i = 0; i < args.Length; i++)
             {
-                if (!Commands.AwailableCommands.Contains(args[i]))
+				if (!Commands.AwailableCommands.Contains(args[i].ToLower()))
                 {
                     Console.WriteLine(
                         "'{0}' command is not supported, use CommandParser.exe /? to see set of allowed commands",
                         args[i]);
                     continue;
                 }
-                switch (args[i])
+				switch (args[i].ToLower())
                 {
                     case "-ping":
                     {
@@ -67,8 +68,14 @@ namespace CommandParser
                         ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.SortAndPrint);
                         break;
                     }
+					case "-exit":
+					{
+						Commands.Exit ();
+						return true;
+					}
                 }
             }
+			return false;
         }
 
         /// <summary>

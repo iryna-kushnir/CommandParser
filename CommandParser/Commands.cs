@@ -8,21 +8,31 @@ namespace CommandParser
     ///     Contains methods that execute all the supported commands
     /// </summary>
     public static class Commands
-    {
+	{
         /// <summary>
         ///     The list of supported commands
         /// </summary>
-        public static List<string> AwailableCommands = new List<string>
-        {
-            "/?",
-            "/help",
-            "-help",
-            "-k",
-            "-ping",
-            "-print",
-            "-color",
-            "-sort"
-        };
+        private static List<string> _awailableCommands = new List<string> {
+			"/?",
+			"/help",
+			"-help",
+			"-k",
+			"-ping",
+			"-print",
+			"-color",
+			"-sort",
+			"-exit"
+		};
+
+		/// <summary>
+		/// 	Gets the awailable commands
+		/// </summary>
+		/// <value>The awailable commands</value>
+		public static List<string> AwailableCommands{
+			get{ 
+				return _awailableCommands;
+			}
+		}
 
         /// <summary>
         ///     Prints user help to console - description of all supported commands. Corresponds to /?, /help and -help commands
@@ -40,6 +50,7 @@ Here is the list of supported commands:
 -print <message> - Prints provided message
 -color <color_name> - Changes text color to color_name
 -sort [values to sort] - Sorts and prints provided values. Sorts all the values within [] brackets or if there is no brackets takes all the values until occurrence of the next command
+-exit - exits CommandParser
 
 Usage example: CommandParser.exe -k [key1 value1 key2 value2]
 
@@ -77,7 +88,7 @@ You can pass a few commands simultaneously and they will be executed in turn!");
         /// <param name="keysAndValues">List of keys and values to be printed</param>
         public static void PrintKeyValue(List<string> keysAndValues)
         {
-            RemoveBrakets(ref keysAndValues);
+            RemoveBrakets(keysAndValues);
             var l = keysAndValues.Count;
             if (keysAndValues.Count == 0)
             {
@@ -120,7 +131,7 @@ You can pass a few commands simultaneously and they will be executed in turn!");
         /// <param name="list"></param>
         public static void SortAndPrint(List<string> list)
         {
-            RemoveBrakets(ref list);
+            RemoveBrakets(list);
             var l = list.Count;
             if (list.Count == 0)
             {
@@ -129,22 +140,49 @@ You can pass a few commands simultaneously and they will be executed in turn!");
             }
             else
             {
-                list.Sort();
-                foreach (var item in
-                    list)
-                {
-                    Console.Write("{0} ", item);
-                }
-                Console.WriteLine();
+				List<long> numbers = new List<long> ();
+				foreach (var item in list)
+				{
+					long parsingResult = 0;
+					if (long.TryParse (item, out parsingResult)) {
+						numbers.Add (parsingResult);
+					} else
+						break;
+				}
+				if (numbers.Count == list.Count) 
+				{
+					numbers.Sort ();
+					foreach (var number in numbers) 
+					{
+						Console.Write ("{0} ", number);
+					}
+					Console.WriteLine ();
+				} else 
+				{
+					list.Sort ();
+					foreach (var item in list) 
+					{
+						Console.Write ("{0} ", item);
+					}
+					Console.WriteLine ();
+				}
             }
         }
+
+		/// <summary>
+		/// 	Prints exiting CommandParser text
+		/// </summary>
+		public static void Exit()
+		{
+			Console.WriteLine ("Exiting CommandParser...");
+		}
 
         /// <summary>
         ///     Removes [] brackets from the provided list of parameters (if both starting [ and closing ] brackets surround the
         ///     list)
         /// </summary>
         /// <param name="list">List of parameters to remove [] from</param>
-        private static void RemoveBrakets(ref List<string> list)
+        private static void RemoveBrakets(List<string> list)
         {
             var l = list.Count;
             if (l != 0)
