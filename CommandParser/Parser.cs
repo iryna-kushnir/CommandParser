@@ -12,24 +12,24 @@ namespace CommandParser
         ///     Method that goes through command line arguments and executes corresponding commands until -exit command happens
         /// </summary>
         /// <param name="args">Command line arguments</param>
-		/// <returns>Bool value that indicates if -exit command was among arguments</returns>
+        /// <returns>Bool value that indicates if -exit command was among arguments</returns>
         public static bool ParseArgsAndExecuteCommands(string[] args)
         {
-			if (args.Length == 0) Commands.ShowHelp();
+            if (args.Length == 0) Commands.ShowHelp();
             if (args.Length == 1 && (args[0] == "/?" || args[0] == "/help" || args[0] == "-help"))
             {
                 Commands.ShowHelp();
             }
             for (var i = 0; i < args.Length; i++)
             {
-				if (!Commands.AwailableCommands.Contains(args[i].ToLower()))
+                if (!Commands.AvailableCommands.Contains(args[i].ToLower()))
                 {
                     Console.WriteLine(
                         "'{0}' command is not supported, use CommandParser.exe /? to see set of allowed commands",
                         args[i]);
                     continue;
                 }
-				switch (args[i].ToLower())
+                switch (args[i].ToLower())
                 {
                     case "-ping":
                     {
@@ -68,14 +68,14 @@ namespace CommandParser
                         ChooseParamsAndInvokeBracketCommand(args, ref i, Commands.SortAndPrint);
                         break;
                     }
-					case "-exit":
-					{
-						Commands.Exit ();
-						return true;
-					}
+                    case "-exit":
+                    {
+                        Commands.Exit();
+                        return true;
+                    }
                 }
             }
-			return false;
+            return false;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace CommandParser
         {
             for (var i = startIndex; i < args.Length; i++)
             {
-                if (Commands.AwailableCommands.Contains(args[i])) return i;
+                if (Commands.AvailableCommands.Contains(args[i])) return i;
             }
             return args.Length;
         }

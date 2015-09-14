@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace CommandParser
 {
@@ -15,11 +14,11 @@ namespace CommandParser
         /// <param name="args">Command line arguments</param>
         private static void Main(string[] args)
         {
-            bool exit = Parser.ParseArgsAndExecuteCommands(args);
-			while (!exit) 
-			{
-				exit = Parser.ParseArgsAndExecuteCommands (new Regex(" ").Split(Console.ReadLine ()));
-			}
+            var exit = Parser.ParseArgsAndExecuteCommands(args);
+            while (!exit)
+            {
+                exit = Parser.ParseArgsAndExecuteCommands(Console.ReadLine().Split(' '));
+            }
         }
     }
 }

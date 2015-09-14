@@ -12,7 +12,7 @@ namespace CommandParser
         /// <summary>
         ///     The list of supported commands
         /// </summary>
-        private static List<string> _awailableCommands = new List<string> {
+        private static List<string> _availableCommands = new List<string> {
 			"/?",
 			"/help",
 			"-help",
@@ -25,12 +25,12 @@ namespace CommandParser
 		};
 
 		/// <summary>
-		/// 	Gets the awailable commands
+		/// 	Gets the available commands
 		/// </summary>
-		/// <value>The awailable commands</value>
-		public static List<string> AwailableCommands{
+		/// <value>The available commands</value>
+		public static List<string> AvailableCommands{
 			get{ 
-				return _awailableCommands;
+				return _availableCommands;
 			}
 		}
 
